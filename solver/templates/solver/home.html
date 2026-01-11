@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8">
+<title>ගණිත ගැටළු විසඳුම් යෙදුම</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala&display=swap" rel="stylesheet">
+
+<style>
+body {
+    font-family: 'Noto Sans Sinhala', Arial, sans-serif;
+    background: linear-gradient(135deg, #f0f4ff, #e0f7fa);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 95%;
+    max-width: 720px;
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+    padding: 45px;
+}
+
+h2 {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.welcome {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: #34495e;
+    margin-bottom: 8px;
+}
+
+.intro {
+    text-align: center;
+    font-size: 15px;
+    color: #7f8c8d;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+textarea {
+    width: 100%;
+    height: 180px;
+    padding: 18px;
+    font-size: 16px;
+    border-radius: 12px;
+    border: 1px solid #bbb;
+    resize: none;
+    transition: all 0.25s;
+}
+
+textarea:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 10px rgba(52,152,219,0.3);
+    outline: none;
+}
+
+.buttons {
+    display: flex;
+    gap: 18px;
+    margin-top: 25px;
+}
+
+button {
+    flex: 1;
+    padding: 16px;
+    font-size: 16px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.18);
+}
+
+.explain {
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+}
+
+.direct {
+    background: linear-gradient(90deg, #00b09b, #96c93d);
+}
+
+/* CAMERA */
+.camera-section {
+    margin-top: 30px;
+    text-align: center;
+}
+
+video {
+    width: 100%;
+    max-width: 320px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+}
+
+.capture-btn {
+    margin-top: 12px;
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: none;
+    background: #3498db;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.note {
+    font-size: 14px;
+    color: #555;
+    margin-top: 8px;
+}
+
+/* SOLUTION */
+.solution {
+    margin-top: 35px;
+    background: #f8f9fa;
+    border-left: 6px solid #3498db;
+    padding: 22px;
+    border-radius: 12px;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #2c3e50;
+    max-height: 350px;
+    overflow-y: auto;
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+.solution h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.solution pre {
+    white-space: pre-wrap;
+    margin: 0;
+    font-family: 'Noto Sans Sinhala', monospace;
+}
+
+.examples {
+    margin-top: 30px;
+    background: #e3f2fd;
+    padding: 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    color: #34495e;
+}
+
+@keyframes fadeIn {
+    from {opacity:0; transform:translateY(10px);}
+    to {opacity:1; transform:translateY(0);}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h2>🧮 ගණිත ගැටළු විසඳුම් යෙදුම</h2>
+<div class="welcome">ආයුබෝවන්! 👋</div>
+<div class="intro">
+    ඔබේ ගණිත ගැටළු ටයිප් කර හෝ අත්ලියන ගැටළුවක පින්තූරයක් ලබාගෙන  
+    සිංහල භාෂාවෙන් විසඳුම් ලබා ගන්න.
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <textarea id="question" name="question" placeholder="ඔබේ ගණිත ගැටලුව මෙහි ඇතුළත් කරන්න">{{ question }}</textarea>
+
+    <div class="buttons">
+        <button type="submit" name="explain" class="explain">විස්තරාත්මක විසඳුම</button>
+        <button type="submit" name="direct" class="direct">සෘජු පිළිතුර</button>
+    </div>
+</form>
+
+<!-- CAMERA 
+<div class="camera-section">
+    <video id="video" style="display:none;"></video>
+
+    <button class="capture-btn" id="capture">
+        📷 පින්තූරය ලබාගන්න
+    </button>
+
+    <canvas id="canvas" style="display:none;"></canvas>
+
+    <div class="note">
+        පැහැදිලි අත්ලියන ගණිත ගැටළුවක්, සුදු කඩදාසියක, අඳුරු පෑනකින් ලියන්න
+    </div>
+</div>-->
+
+
+{% if answer %}
+<div class="solution">
+    <h3>📘 ප්‍රතිඵලය</h3>
+    <pre>{{ answer }}</pre>
+</div>
+{% endif %}
+
+<div class="examples">
+<strong>උදාහරණ:</strong>
+<ul>
+    <li>5x + 3 = 18</li>
+    <li>x² − 4x + 4 = 0</li>
+    <li>∫ 3x² dx</li>
+</ul>
+</div>
+
+</div>
+
+<script>
+const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
+const captureBtn = document.getElementById("capture");
+const textarea = document.getElementById("question");
+
+let cameraActive = false;
+let stream = null;
+
+captureBtn.onclick = async () => {
+
+    // 1️⃣ OPEN CAMERA
+    if (!cameraActive) {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+            video.play();
+            video.style.display = "block";
+            cameraActive = true;
+            captureBtn.innerText = "📸 පින්තූරය කැපීම";
+        } catch (err) {
+            alert("Camera access ලබාගත නොහැක");
+        }
+        return;
+    }
+
+    // 2️⃣ CAPTURE IMAGE
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0);
+
+    const imageData = canvas.toDataURL("image/png");
+
+    // 3️⃣ STOP CAMERA BUT KEEP PREVIEW
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+    }
+    video.srcObject = null; // freezes last frame
+    cameraActive = false;
+    captureBtn.innerText = "📷 නැවත පින්තූරය ලබාගන්න";
+
+    // 4️⃣ SEND IMAGE TO BACKEND
+    fetch("{% url 'extract_math' %}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({ image: imageData })
+    })
+    .then(res => res.json())
+    .then(data => {
+        textarea.value = data.question || "";
+        textarea.scrollIntoView({ behavior: "smooth" });
+    })
+    .catch(() => alert("ගණිත ගැටළුව හඳුනාගත නොහැකි විය"));
+};
+</script>
+
+
+
+</body>
+</html>
